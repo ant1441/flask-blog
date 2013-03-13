@@ -1,0 +1,13 @@
+#main .date {
+    border: 1px solid #ccc;
+    float: right;
+    display: inline;
+    position: relative;
+}
+#main h1 {
+    font-weight: normal;
+}
+#main h1.post-title a:hover{
+    colorL #000;
+    text-decoration: none;
+}

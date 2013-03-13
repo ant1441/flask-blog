@@ -1,0 +1,20 @@
+<div class=post>
+    <h1 class="post-title">
+        <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
+    </h1>
+    <p class="date">{{ post.created_at }}</p>
+    <div class=posted>
+        <span name=avatar><img src="{{ post.author.avatar(32) }}"></span>
+        Posted by
+        <span name=author class=label>{{ post.author.username }}</span>.
+    </div>
+    <div class=tags>
+        Tagged:
+        {% for tag in post.categories %}
+            <span>{{ tag.name }}</span>
+        {% endfor %}
+    </div>
+    <div class=post-body>
+        {{ post.content }}
+    </div>
+</div>

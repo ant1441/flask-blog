@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}
+Write a post
+{% endblock %}
+{% block content %}
+   <span name=post-form>
+       <form class="form-horizontal" action="" method="post" name="post-blog">
+            {{ form.hidden_tag() }}
+            <legend>Post</legend>
+            <div class="control-group hidden">
+                <label class="control-label" for="{{ form.author.id }}">Author</label>
+                <div class=controls>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        {{ form.author(size=12, placeholder="Author") }}
+                    </div>
+                </div>
+            {% if form.errors.author %}
+                <span class="alert alert-error">
+                    {% for authorError in form.errors.author %}
+                        {{ authorError }}
+                    {% endfor %}
+                </span>
+            {% endif %}
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="{{ form.title.id }}">Title</label>
+                <div class=controls>
+                    {{ form.title(placeholder="Title") }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="{{ form.text.id }}">Text</label>
+                <div class=controls>
+                    {{ form.text(rows=5, placeholder="Enter your blog post here") }}
+                </div>
+                {% if form.errors.text %}
+                    <span class="alert alert-error">
+                        {% for textError in form.errors.text %}
+                            {{ textError }}
+                        {% endfor %}
+                    </span>
+                {% endif %} 
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="{{ form.codeType.id }}">Code</label>
+                <div class=controls>
+                    {{ form.code }}
+                    <div class="hidden">
+                        {{ form.codeType }}
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="{{ form.slug.id }}">Slug</label>
+                <div class=controls>
+                    {{ form.slug }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </span>  
+{% endblock %}
