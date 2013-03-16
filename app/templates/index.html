@@ -3,7 +3,20 @@
 Home
 {% endblock %}
 {% block content %}
-    {% for post in posts %}
-        {% include 'post.html' %}
-    {% endfor %}
+<div class=row>
+    <div class=span8>
+        <div class=main>
+            <div class=content>
+                {% for post in posts %}
+                    {% include 'post.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class=span3>
+        <div id=sidebar>
+            {% include 'aboutMe.html' %}
+        </div>
+    </div>
+</div>
 {% endblock %}
