@@ -67,14 +67,18 @@ class Post(db.Model):
 
     category = db.relationship('Category', backref='posts', lazy='dynamic')
 
-    def __init__(self, title, content, user, category_id=None, hidden=False):
+    def __init__(self, title, content, user, category_id=None, code=False, hidden=False):
         self.title = title
         self.content = content
         self.category_id = category_id
         self.user_id = user.id
         if self.created_at is None:
             self.created_at = datetime.utcnow()
+        self.code = code
         self.hidden = hidden
+
+    def date(self, format_="%d %b %y", english=False):
+        return datetime.strftime(self.created_at, format_)
 
     def __repr__(self):
         return "<Post %d: '%s'>" % (self.id, self.title)

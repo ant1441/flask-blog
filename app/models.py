@@ -77,6 +77,9 @@ class Post(db.Model):
         self.code = code
         self.hidden = hidden
 
+    def date(self, format_="%d %b %y", english=False):
+        return datetime.strftime(self.created_at, format_)
+
     def __repr__(self):
         return "<Post %d: '%s'>" % (self.id, self.title)
 

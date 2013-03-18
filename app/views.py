@@ -89,7 +89,6 @@ class adminViews(BaseView):
     def index(self):
         return self.render('index.html')
 
-admin.add_view(adminViews(name='hello'))
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Post, db.session))
 admin.add_view(ModelView(Category, db.session))
