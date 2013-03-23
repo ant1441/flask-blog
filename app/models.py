@@ -52,6 +52,9 @@ class User(db.Model):
     def __repr__(self):
         return "<User %d: '%s'>" % (self.id, self.username)
 
+    def __unicode__(self):
+        return self.username
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), index=True)

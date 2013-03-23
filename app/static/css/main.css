@@ -25,6 +25,10 @@
 }
 
 /* Post */
+.post {
+    border-bottom: 1px solid #f5f5f5;
+}
+
 .post-header {
     border-bottom: 1px dotted;
     border-color: #444444;
@@ -34,9 +38,9 @@
 }
 
 .post-header .date {
-    text-align: right;
+    float: right;
+    vertical-align: bottom;
     font-size: 110%;
-    border: 1px dashed;
     border-color: #bbbbbb;
 }
 
@@ -48,4 +52,16 @@
 .post-title a:hover {
     color: #b9b9b9;
     text-decoration: none
+}
+
+.social-share {
+    border-top 1px dotted;
+}
+
+.social-share ul {
+    list-style-type: none;
+}
+    
+.social-share li {
+    display: inline;
 }
