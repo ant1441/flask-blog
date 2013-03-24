@@ -12,4 +12,4 @@ lm = LoginManager()
 lm.setup_app(app)
 lm.login_view = 'login'
 
-from app import views, models
+from app import views, models, error_views, admin_views

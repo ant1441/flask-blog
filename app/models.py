@@ -1,9 +1,11 @@
-from app  import db
 from hashlib import md5
 from datetime import datetime
+from flask.ext.login import make_secure_token
+from app import db
 
 ROLE_USER = 1
 ROLE_ADMIN = 0
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,10 +45,18 @@ class User(db.Model):
         return unicode(self.id)
 
     def avatar(self, size):
-        return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&s=' + str(size)
+        hexDigest = md5(self.email).hexdigest()
+        size = str(size)
+
+        return 'http://www.gravatar.com/avatar/{0}?d=mm&s={1}'.format(
+            hexDigest, size)
 
     def get_auth_token(self):
-        secure_token = flask.ext.login.make_secure_token(self.id, self.username, self.password, self.role)
+        secure_token = make_secure_token(
+            self.id,
+            self.username,
+            self.password,
+            self.role)
         return secure_token
 
     def __repr__(self):
@@ -54,6 +64,7 @@ class User(db.Model):
 
     def __unicode__(self):
         return self.username
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -70,7 +81,13 @@ class Post(db.Model):
 
     category = db.relationship('Category', backref='posts', lazy='dynamic')
 
-    def __init__(self, title, content, user, category_id=None, code=False, hidden=False):
+    def __init__(self,
+                 title,
+                 content,
+                 user,
+                 category_id=None,
+                 code=False,
+                 hidden=False):
         self.title = title
         self.content = content
         self.category_id = category_id
@@ -85,6 +102,7 @@ class Post(db.Model):
 
     def __repr__(self):
         return "<Post %d: '%s'>" % (self.id, self.title)
+
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
