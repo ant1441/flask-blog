@@ -1,54 +1,86 @@
-import os
 import unittest
 from datetime import datetime
+import re
 
-from config import basedir
-from app import app, db
+from app import db
 from app.models import User
 
 
-class TestUserModel(unittest.TestCase):
-    def sedtUp(self):
-        app.config['TESTING'] = True
-        app.config['CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = \
-            'sqlite:///' + os.path.join(basedir, 'database\test.db')
-        self.app = app.test_client()
-        db.create_all()
-
-    def teadrDown(self):
-        db.session.remove()
-        db.drop_all()
+class TestUserModelNoDb(unittest.TestCase):
+    def setUp(self):
+        self.u = User("Test", "test@example.com", "password")
 
     def test_avatar(self):
-        u = User("Test", "test@example.com", "password")
-        avatar = u.avatar(1)
+        avatar = self.u.avatar(1)
         expected = \
             "http://www.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0"
         assert avatar[0:len(expected)] == expected
 
     def test_avatar_size(self):
-        u = User("Test", "test@example.com", "password")
-        avatar = u.avatar(5)
+        avatar = self.u.avatar(5)
         expected = \
             "55502f40dc8b7c769880b10874abc9d0?d=mm&s=5"
         assert avatar[-len(expected):] == expected
 
     def test_created_at(self):
-        u = User("Test", "test@example.com", "password")
         expected = datetime.utcnow()
-        time = u.created_at
+        time = self.u.created_at
         assert (time - expected).total_seconds() < 1
 
     def test_no_posts(self):
-        u = User("Test", "test@example.com", "password")
         expected = 0
-        number_posts = u.posts.count()
+        number_posts = self.u.posts.count()
         assert number_posts == expected
 
-    def test_password(self):
-        u = User("Test", "test@example.com", "password")
-        expected = \
-            "sha1"
-        algorithm = u.password[:4]
+    def test_password_algorithm(self):
+        expected = "sha1"
+        algorithm = self.u.password[:4]
         assert algorithm == expected
+
+    def test_password_length(self):
+        expected = 62
+        length = len(self.u.password)
+        assert length == expected
+
+    def test_active(self):
+        expected = True
+        active = self.u.is_active()
+        assert active == expected
+
+    def test_anonymous(self):
+        expected = False
+        anonymous = self.u.is_anonymous()
+        assert anonymous == expected
+
+    def test_authenticated(self):
+        expected = True
+        authenticated = self.u.is_authenticated()
+        assert authenticated == expected
+
+    def test_repr(self):
+        expected = r"<User .*?: '.*'>"
+        expected_type = str
+        representation = repr(self.u)
+        assert re.match(expected, representation)
+        assert type(representation) == expected_type
+
+    def test_unicode(self):
+        expected = u"Test"
+        expected_type = unicode
+        unicode_repr = unicode(self.u)
+        assert unicode_repr == expected
+        assert type(unicode_repr) == expected_type
+
+
+class TestUserModelDb(unittest.TestCase):
+    def setUp(self):
+        self.u = User("Test", "test@example.com", "password")
+        db.session.add(self.u)
+
+    def tearDown(self):
+        db.session.rollback()
+
+    def test_id_type(self):
+        expected = unicode
+        uid = self.u.get_id()
+        assert type(uid) == expected
