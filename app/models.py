@@ -33,6 +33,7 @@ class User(db.Model):
             password,
             salt_length=SALT_LENGTH)
         del password
+        self.active = True
         if self.created_at is None:
             self.created_at = datetime.utcnow()
 
@@ -65,7 +66,10 @@ class User(db.Model):
         return secure_token
 
     def __repr__(self):
-        return "<User %d: '%s'>" % (self.id, self.username)
+        if self.id is not None:
+            return "<User %d: '%s'>" % (self.id, self.username)
+        else:
+            return "<User %s: '%s'>" % ("<'No id set'>", self.username)
 
     def __unicode__(self):
         return self.username
