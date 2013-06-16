@@ -1,11 +1,15 @@
-from flask import render_template, flash, redirect, url_for, g, request
+import time
+import logging
 from flask.ext.login import login_user, logout_user, current_user,\
     login_required
-from app import app, lm, db
+from flask import render_template, flash, redirect, url_for, g, request
+from werkzeug.security import check_password_hash
 from forms import postBlogForm, loginForm
+from app import app, lm, db
 from models import User, Post
-from hashlib import md5
-import time
+
+# set up logger
+log = logging.getLogger(__name__)
 
 
 @app.before_request
@@ -62,7 +66,7 @@ def load_user(id):
 
 
 def try_login(user, password):
-    if password == user.password:
+    if check_password_hash(user.password, password):
         return True
     return False
 
@@ -74,8 +78,9 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.user.data).first()
         if user:
-            if try_login(user, md5(form.password.data).hexdigest()):
+            if try_login(user, str(form.password.data)):
                 flash('Logged in successfully!')
+                log.info("User %s logged in", user)
                 login_user(user, remember=form.remember_me.data)
                 return redirect(request.args.get("next") or url_for("index"))
         else:

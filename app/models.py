@@ -1,16 +1,19 @@
 from hashlib import md5
 from datetime import datetime
 from flask.ext.login import make_secure_token
+from werkzeug.security import generate_password_hash
 from app import db
 
 ROLE_USER = 1
 ROLE_ADMIN = 0
 
+SALT_LENGTH = 16
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    password = db.Column(db.String(32))
+    password = db.Column(db.LargeBinary(144))
     email = db.Column(db.String(128), index=True, unique=True)
     role = db.Column(db.Integer, default=ROLE_USER)
     first_name = db.Column(db.String(128), index=True)
@@ -26,7 +29,9 @@ class User(db.Model):
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
-        self.password = md5(password).hexdigest()
+        self.password = generate_password_hash(
+            password,
+            salt_length=SALT_LENGTH)
         del password
         if self.created_at is None:
             self.created_at = datetime.utcnow()

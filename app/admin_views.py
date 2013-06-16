@@ -10,7 +10,7 @@ class DatabaseAdminView(ModelView):
 
 
 class UserAdmin(ModelView):
-    column_exclude_list = ['about_me']
+    column_exclude_list = ['about_me', 'salt', 'password']
     column_sortable_list = ('username',
                             'email',
                             'role',

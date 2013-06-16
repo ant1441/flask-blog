@@ -23,3 +23,7 @@ def test_data():
                        models.Category.query.first())
     db.session.add(post)
     db.session.commit()
+
+if __name__ == "__main__":
+    init_db()
+    test_data()

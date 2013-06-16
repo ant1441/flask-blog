@@ -37,3 +37,6 @@ nosetests.xml
 # tmp files
 *~
 *.swp
+
+# Database files
+*.db
