@@ -2,6 +2,7 @@
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from app import app
 
-app.config['PROFIE'] = True
-app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
-app.run()
+if __name__ == '__main__':
+    app.config['PROFIE'] = True
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
+    app.run()
