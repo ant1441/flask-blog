@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
 if __name__ == "__main__":
-    from app import app
+    from blog import app
     app.run()

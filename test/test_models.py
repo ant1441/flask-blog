@@ -1,14 +1,12 @@
 import unittest
+from nose.tools import raises
 from datetime import datetime
+import tempfile
 import re
 
-import app
-from app import db
-from app.models import User
-
-
-def setUpModule():
-    app.config['testing'] = True
+import blog
+from blog import db
+from blog.models import User
 
 
 class TestUserModelNoDb(unittest.TestCase):
@@ -19,13 +17,19 @@ class TestUserModelNoDb(unittest.TestCase):
         avatar = self.u.avatar(1)
         expected = \
             "http://www.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0"
-        assert avatar[0:len(expected)] == expected
+        assert avatar.startswith(expected)
 
     def test_avatar_size(self):
         avatar = self.u.avatar(5)
         expected = \
             "55502f40dc8b7c769880b10874abc9d0?d=mm&s=5"
-        assert avatar[-len(expected):] == expected
+        assert avatar.endswith(expected)
+
+    def test_avatar_largersize(self):
+        avatar = self.u.avatar(10)
+        expected = \
+            "55502f40dc8b7c769880b10874abc9d0?d=mm&s=10"
+        assert avatar.endswith(expected)
 
     def test_created_at(self):
         expected = datetime.utcnow()
@@ -79,6 +83,7 @@ class TestUserModelNoDb(unittest.TestCase):
 
 class TestUserModelDb(unittest.TestCase):
     def setUp(self):
+        self.db_fd, blog.app.config['DATABASE'] = tempfile.mkstemp()
         self.u = User("Test", "test@example.com", "password")
         #self.admin = User.query.get(1)
         db.session.add(self.u)
@@ -91,6 +96,7 @@ class TestUserModelDb(unittest.TestCase):
         uid = self.u.get_id()
         assert type(uid) == expected
 
+    @raises(RuntimeError)
     def test_auth_token(self):
         expected = "something"
         auth_token = self.u.get_auth_token()

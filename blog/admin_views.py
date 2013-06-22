@@ -1,6 +1,6 @@
 from flask.ext.admin.contrib.sqlamodel import ModelView
 from flask.ext.login import current_user
-from app import db, admin
+from blog import db, admin
 from models import User, Post, Category
 
 

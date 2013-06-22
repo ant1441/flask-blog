@@ -2,7 +2,7 @@ from hashlib import md5
 from datetime import datetime
 from flask.ext.login import make_secure_token
 from werkzeug.security import generate_password_hash
-from app import db
+from blog import db
 
 ROLE_USER = 1
 ROLE_ADMIN = 0

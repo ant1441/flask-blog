@@ -1,4 +1,4 @@
-from app import db
+from blog import db
 
 
 def init_db():
@@ -6,7 +6,7 @@ def init_db():
 
 
 def test_data():
-    from app import models
+    from blog import models
     admin = models.User("Admin", "admin@example.com", "pass")
     me = models.User("Adam", "adam@example.com", "password")
     guest = models.User("Guest", "guest@example.com", "guestpass")

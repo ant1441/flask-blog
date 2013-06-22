@@ -5,7 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.admin import Admin
 
-logging_cfg_file = "app/logging.cfg"
+logging_cfg_file = "blog/logging.cfg"
 
 # import logging configuration
 if logging_cfg_file:
@@ -25,4 +25,4 @@ lm = LoginManager()
 lm.setup_app(app)
 lm.login_view = 'login'
 
-from app import views, models, error_views, admin_views
+from blog import views, models, error_views, admin_views

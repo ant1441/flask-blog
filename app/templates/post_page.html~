@@ -1,7 +1,0 @@
-{% extends "base.html" %}
-{% block title %}
-    {{ post.title }}
-{% endblock %}
-{% block condtent %}
-    {% include "post.html" %}     
-{% endblock %}

@@ -1,15 +1,14 @@
 import time
-import logging
 from flask.ext.login import login_user, logout_user, current_user,\
     login_required
 from flask import render_template, flash, redirect, url_for, g, request
 from werkzeug.security import check_password_hash
 from forms import postBlogForm, loginForm
-from app import app, lm, db, log
+from blog import app, lm, db, log
 from models import User, Post
 
 # set up logger
-log = logging.getLogger(__name__)
+#log = logging.getLogger(__name__)
 
 
 @app.before_request

@@ -2,8 +2,7 @@ import os
 import unittest
 
 from config import basedir
-from app import app, db
-from app.models import User
+from blog import app, db
 
 
 class TestSimpleViews(unittest.TestCase):
