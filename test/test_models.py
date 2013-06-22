@@ -2,8 +2,13 @@ import unittest
 from datetime import datetime
 import re
 
+import app
 from app import db
 from app.models import User
+
+
+def setUpModule():
+    app.config['testing'] = True
 
 
 class TestUserModelNoDb(unittest.TestCase):
@@ -75,6 +80,7 @@ class TestUserModelNoDb(unittest.TestCase):
 class TestUserModelDb(unittest.TestCase):
     def setUp(self):
         self.u = User("Test", "test@example.com", "password")
+        #self.admin = User.query.get(1)
         db.session.add(self.u)
 
     def tearDown(self):
@@ -84,3 +90,16 @@ class TestUserModelDb(unittest.TestCase):
         expected = unicode
         uid = self.u.get_id()
         assert type(uid) == expected
+
+    def test_auth_token(self):
+        expected = "something"
+        auth_token = self.u.get_auth_token()
+        assert auth_token == expected
+
+    #def tedst_repr(self):
+        #expected = r"<User /d*?: '.*'>"
+        #expected_type = str
+        #representation = repr(self.admin)
+        #assert False, representation
+        #assert re.match(expected, representation)
+        #assert type(representation) == expected_type

@@ -8,7 +8,7 @@ def init_db():
 def test_data():
     from app import models
     admin = models.User("Admin", "admin@example.com", "pass")
-    me = models.User("Adam", "adam@example.com", "futurama")
+    me = models.User("Adam", "adam@example.com", "password")
     guest = models.User("Guest", "guest@example.com", "guestpass")
     db.session.add(admin)
     db.session.add(me)
