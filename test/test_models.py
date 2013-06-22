@@ -1,3 +1,4 @@
+from os.path import join
 import unittest
 from nose.tools import raises
 from datetime import datetime
@@ -5,8 +6,10 @@ import tempfile
 import re
 
 import blog
-from blog import db
+from blog import app, db
 from blog.models import User
+from blog.database import db_funcs
+from config import basedir
 
 
 class TestUserModelNoDb(unittest.TestCase):
@@ -88,9 +91,6 @@ class TestUserModelDb(unittest.TestCase):
         #self.admin = User.query.get(1)
         db.session.add(self.u)
 
-    def tearDown(self):
-        db.session.rollback()
-
     def test_id_type(self):
         expected = unicode
         uid = self.u.get_id()
@@ -109,3 +109,24 @@ class TestUserModelDb(unittest.TestCase):
         #assert False, representation
         #assert re.match(expected, representation)
         #assert type(representation) == expected_type
+
+    def tearDown(self):
+        db.session.rollback()
+
+
+class TestUserModelWithDb(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.config['CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(
+            join(basedir, 'test.db'))
+        print app.config['SQLALCHEMY_DATABASE_URI']
+        self.app = app.test_client()
+        db.create_all()
+
+    def test_voodoo(self):
+        assert db is not None
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
