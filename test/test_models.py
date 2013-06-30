@@ -2,11 +2,16 @@ import unittest
 from nose.tools import raises
 from datetime import datetime
 import tempfile
-import re
 
 import blog
 from blog import app, db
-from blog.models import User
+from blog.models import User, Post, Category
+
+
+class TestModels(unittest.TestCase):
+    def test_constants(self):
+        assert blog.models.ROLE_USER == 1
+        assert blog.models.ROLE_ADMIN == 0
 
 
 class TestUserModelNoDb(unittest.TestCase):
@@ -67,10 +72,10 @@ class TestUserModelNoDb(unittest.TestCase):
         assert authenticated == expected
 
     def test_repr(self):
-        expected = r"<User .*?: '.*'>"
+        expected = r"<User 'No id set': 'Test'>"
         expected_type = str
         representation = repr(self.u)
-        assert re.match(expected, representation)
+        assert expected == representation
         assert type(representation) == expected_type
 
     def test_unicode(self):
@@ -118,11 +123,13 @@ class TestUserModelWithDb(unittest.TestCase):
         db.create_all()
         test_user = User("TestUser", "test@example.com", "password")
         db.session.add(test_user)
+        test_post = Post("Post Title", "Post Content", test_user)
+        db.session.add(test_post)
         db.session.commit()
 
     def test_user_count(self):
         expected = 1
-        assert User.query.count() == expected
+        assert User.query.count() == expected, "Wrong number of users found"
 
     def test_user_details_email(self):
         expected = "test@example.com"
@@ -133,6 +140,109 @@ class TestUserModelWithDb(unittest.TestCase):
         expected = "TestUser"
         user = User.query.filter_by(email="test@example.com").first()
         assert user.username == expected
+
+    def test_user_repr(self):
+        expected = "<User 1: 'TestUser'>"
+        user = User.query.one()
+        assert repr(user) == expected, "DB User repr invalid"
+
+    def test_user_auth_token(self):
+        expected_length = 40
+        expected_type = unicode
+        user = User.query.one()
+        with app.app_context():
+            token = user.get_auth_token()
+        assert len(token) == expected_length, \
+            "Auth token invalid length. Was {0}. Expected {1}".format(
+                len(token),
+                expected_length)
+        assert type(token) == expected_type, \
+            "User auth token invalid type. Was {0}. Expected {1}".format(
+                type(token),
+                expected_type)
+
+    def test_post_count(self):
+        expected = 1
+        assert Post.query.count() == expected
+
+    def tearDown(self):
+        db.session.remove()
+
+    @classmethod
+    def tearDownClass(cls):
+        db.drop_all()
+
+
+class TestPostModelNoDb(unittest.TestCase):
+    def setUp(self):
+        self.u = User("Test User", "test@example.com", "password")
+        self.c = Category("Test Category")
+        self.p = Post("Test Post Title",
+                      "Test Post Content",
+                      self.u,
+                      self.c,
+                      code=True,
+                      hidden=True)
+
+    def test_date(self):
+        expected_type = str
+        expected_before = datetime.now()
+        date = self.p.date()
+        datetime_date = datetime.strptime(date, "%d %b %y")
+        assert type(date) == expected_type, \
+            "Date type incorrect. Was {0}. Expected {1}".format(
+                type(date),
+                expected_type)
+        assert datetime_date < expected_before, "Date not before now"
+
+    def test_repr(self):
+        expected = "<Post 'No id set': 'Test Post Title'>"
+        repr_ = repr(self.p)
+        assert repr_ == expected
+
+
+class TestPostModelWithDb(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.app = app.test_client()
+        db.create_all()
+        test_user = User("Test User", "test@example.com", "password")
+        db.session.add(test_user)
+        test_category = Category("Test Category")
+        db.session.add(test_category)
+        test_post = Post(
+            "Post Title",
+            "Post Content",
+            test_user,
+            test_category)
+        db.session.add(test_post)
+        db.session.commit()
+
+    def test_post_db_repr(self):
+        expected = "<Post 1: 'Post Title'>"
+        post_repr = repr(Post.query.one())
+        assert post_repr == expected
+
+    def tearDown(self):
+        db.session.remove()
+
+    @classmethod
+    def tearDownClass(cls):
+        db.drop_all()
+
+class TestCategoryModelWithDb(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.app = app.test_client()
+        db.create_all()
+        test_category = Category("Test Category")
+        db.session.add(test_category)
+        db.session.commit()
+
+    def test_category_db_repr(self):
+        expected = "<Category 1: 'Test Category'>"
+        category_repr = repr(Category.query.one())
+        assert category_repr == expected
 
     def tearDown(self):
         db.session.remove()

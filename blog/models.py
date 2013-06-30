@@ -34,8 +34,7 @@ class User(db.Model):
             salt_length=SALT_LENGTH)
         del password
         self.active = True
-        if self.created_at is None:
-            self.created_at = datetime.utcnow()
+        self.created_at = datetime.utcnow()
         self.last_modified = datetime.utcnow()
 
     def is_authenticated(self):
@@ -43,7 +42,7 @@ class User(db.Model):
 
     def is_active(self):
         return True
-        return self.active
+        #return self.active
 
     def is_anonymous(self):
         return False
@@ -60,17 +59,17 @@ class User(db.Model):
 
     def get_auth_token(self):
         secure_token = make_secure_token(
-            self.id,
+            str(self.id),
             self.username,
             self.password,
-            self.role)
+            str(self.role))
         return secure_token
 
     def __repr__(self):
+        format_ = "<User {0}: '{1}'>"
         if self.id is not None:
-            return "<User %d: '%s'>" % (self.id, self.username)
-        else:
-            return "<User %s: '%s'>" % ("<'No id set'>", self.username)
+            return format_.format(self.id, self.username)
+        return format_.format("'No id set'", self.username)
 
     def __unicode__(self):
         return self.username
@@ -102,16 +101,19 @@ class Post(db.Model):
         self.content = content
         self.category_id = category_id
         self.user_id = user.id
-        if self.created_at is None:
-            self.created_at = datetime.utcnow()
+        self.created_at = datetime.utcnow()
         self.code = code
         self.hidden = hidden
 
     def date(self, format_="%d %b %y", english=False):
+        pass
         return datetime.strftime(self.created_at, format_)
 
     def __repr__(self):
-        return "<Post %d: '%s'>" % (self.id, self.title)
+        format_ = "<Post {0}: '{1}'>"
+        if self.id is not None:
+            return format_.format(self.id, self.title)
+        return format_.format("'No id set'", self.title)
 
 
 class Category(db.Model):
@@ -120,14 +122,16 @@ class Category(db.Model):
     created_at = db.Column(db.DateTime)
     hidden = db.Column(db.Boolean)
 
-    # relationshipts
+    # relationships
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
     def __init__(self, name, hidden=False):
         self.name = name
-        if self.created_at is None:
-            self.created_at = datetime.utcnow()
+        self.created_at = datetime.utcnow()
         self.hidden = hidden
 
     def __repr__(self):
-        return "<Category %d: '%s'>" % (self.id, self.name)
+        format_ = "<Category {0}: '{1}'>"
+        if self.id is not None:
+            return format_.format(self.id, self.name)
+        return format_.format("'No id set'", self.name)

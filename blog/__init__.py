@@ -20,6 +20,7 @@ log = logging.getLogger("blog")
 
 app = Flask(__name__)
 config_object = 'Testing'
+#config_object = 'Production'
 app.config.from_object('blog.config.{}'.format(config_object))
 db = SQLAlchemy(app)
 admin = Admin(app, name='Blog')
@@ -28,4 +29,8 @@ lm = LoginManager()
 lm.setup_app(app)
 lm.login_view = 'login'
 
-from blog import views, models, error_views, admin_views
+if config_object == 'Production':
+    # If these are imported by nose, the coverage gets all buggered up.
+    # How can I check for this, as apposed to checking for config setting
+    # of production?
+    from blog import views, models, error_views, admin_views  # flake8: noqa
