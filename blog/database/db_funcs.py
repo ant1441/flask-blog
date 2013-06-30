@@ -1,4 +1,5 @@
 from blog import db
+from blog.models import User, Post, Category
 
 
 def init_db():
@@ -6,21 +7,20 @@ def init_db():
 
 
 def test_data():
-    from blog import models
-    admin = models.User("Admin", "admin@example.com", "pass")
-    me = models.User("Adam", "adam@example.com", "password")
-    guest = models.User("Guest", "guest@example.com", "guestpass")
+    admin = User("Admin", "admin@example.com", "pass")
+    me = User("Adam", "adam@example.com", "password")
+    guest = User("Guest", "guest@example.com", "guestpass")
     db.session.add(admin)
     db.session.add(me)
     db.session.add(guest)
     db.session.commit()
-    testCat = models.Category("Test")
+    testCat = Category("Test")
     db.session.add(testCat)
     db.session.commit()
-    post = models.Post("Test Post!",
-                       "This is a test post.",
-                       models.User.query.first(),
-                       models.Category.query.first())
+    post = Post("Test Post!",
+                "This is a test post.",
+                User.query.first(),
+                Category.query.first())
     db.session.add(post)
     db.session.commit()
 

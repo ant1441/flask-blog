@@ -1,4 +1,3 @@
-from os.path import join
 import unittest
 from nose.tools import raises
 from datetime import datetime
@@ -8,8 +7,6 @@ import re
 import blog
 from blog import app, db
 from blog.models import User
-from blog.database import db_funcs
-from config import basedir
 
 
 class TestUserModelNoDb(unittest.TestCase):
@@ -115,18 +112,31 @@ class TestUserModelDb(unittest.TestCase):
 
 
 class TestUserModelWithDb(unittest.TestCase):
-    def setUp(self):
-        app.config['TESTING'] = True
-        app.config['CSRF_ENABLED'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(
-            join(basedir, 'test.db'))
-        print app.config['SQLALCHEMY_DATABASE_URI']
-        self.app = app.test_client()
+    @classmethod
+    def setUpClass(cls):
+        cls.app = app.test_client()
         db.create_all()
+        test_user = User("TestUser", "test@example.com", "password")
+        db.session.add(test_user)
+        db.session.commit()
 
-    def test_voodoo(self):
-        assert db is not None
+    def test_user_count(self):
+        expected = 1
+        assert User.query.count() == expected
+
+    def test_user_details_email(self):
+        expected = "test@example.com"
+        user = User.query.filter_by(email="test@example.com").first()
+        assert user.email == expected
+
+    def test_user_details_username(self):
+        expected = "TestUser"
+        user = User.query.filter_by(email="test@example.com").first()
+        assert user.username == expected
 
     def tearDown(self):
         db.session.remove()
+
+    @classmethod
+    def tearDownClass(cls):
         db.drop_all()

@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from config import basedir
 from blog import app, db
+from blog.config import basedir
 
 
 class TestSimpleViews(unittest.TestCase):

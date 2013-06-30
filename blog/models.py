@@ -13,15 +13,15 @@ SALT_LENGTH = 16
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    password = db.Column(db.LargeBinary(144))
-    email = db.Column(db.String(128), index=True, unique=True)
+    password = db.Column(db.String(58))
+    email = db.Column(db.String(128), index=True)
     role = db.Column(db.Integer, default=ROLE_USER)
     first_name = db.Column(db.String(128), index=True)
     last_name = db.Column(db.String(128), index=True)
     about_me = db.Column(db.Text, index=True)
     created_at = db.Column(db.DateTime)
     last_modified = db.Column(db.DateTime)
-    active = db.Column(db.Boolean)
+    #active = db.Column(db.Boolean)
 
     # relationships
     posts = db.relationship('Post', backref='author', lazy='dynamic')
@@ -36,6 +36,7 @@ class User(db.Model):
         self.active = True
         if self.created_at is None:
             self.created_at = datetime.utcnow()
+        self.last_modified = datetime.utcnow()
 
     def is_authenticated(self):
         return True
