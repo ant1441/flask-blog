@@ -1,12 +1,11 @@
-from hashlib import md5
 from datetime import datetime
+from hashlib import md5
 from flask.ext.login import make_secure_token
 from werkzeug.security import generate_password_hash
 from blog import db
 
 ROLE_USER = 1
 ROLE_ADMIN = 0
-
 SALT_LENGTH = 16
 
 

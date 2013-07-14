@@ -230,6 +230,17 @@ class TestPostModelWithDb(unittest.TestCase):
     def tearDownClass(cls):
         db.drop_all()
 
+
+class TestCategoryModelNoDb(unittest.TestCase):
+    def setUp(self):
+        self.c = Category("Test Category")
+
+    def test_repr(self):
+        expected = "<Category 'No id set': 'Test Category'>"
+        category_repr = repr(self.c)
+        assert category_repr == expected
+
+
 class TestCategoryModelWithDb(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
