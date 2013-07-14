@@ -22,7 +22,7 @@ def before_request():
 # begin general views
 @app.route('/')
 def index():
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.created_at.desc()).all()
     return render_template("index.html",
                            title="Home",
                            posts=posts)
