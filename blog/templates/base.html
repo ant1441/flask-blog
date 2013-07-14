@@ -45,7 +45,8 @@
             {% block footer %}
             {% endblock %}
             <span id=gentime>Page generated in {{ g.request_time() }}
-            <span id=attr>created using <a href="http://flask.pocoo.org/">Flask</a> & <a href="http://jinja.pocoo.org/">Jinja2</a></span>
+              <span id=attr>created using <a href="http://flask.pocoo.org/">Flask</a> & <a href="http://jinja.pocoo.org/">Jinja2</a>
+                {% if current_user.is_authenticated() %}.{% else %}<a href="{{ url_for('login') }}">.</a>{% endif %}</span>
             <script src="http://code.jquery.com/jquery-latest.js"></script>
             <script src="/static/js/bootstrap.min.js"></script>
             <!-- <script type="text/javascript" src="static/prettify/prettify.js"></script> -->
