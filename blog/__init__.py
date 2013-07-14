@@ -12,8 +12,11 @@ logging_cfg_file = "logging.cfg"
 # import logging configuration
 if logging_cfg_file:
     import yaml
-    with open(join(basedir, logging_cfg_file)) as config:
-        logging.config.dictConfig(yaml.load(config))
+    try:
+        with open(join(basedir, logging_cfg_file)) as config:
+            logging.config.dictConfig(yaml.load(config))
+    except IOError:
+        logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger("blog")
