@@ -66,3 +66,13 @@
 .social-share li {
     display: inline;
 }
+
+/* Make a Post */
+#post-form input[type=text] {
+    width: 75%;
+}
+
+#post-form textarea {
+    width: 75%;
+    height: 200px;
+}
