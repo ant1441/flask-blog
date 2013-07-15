@@ -26,7 +26,7 @@ Write a post
             <div class="control-group">
                 <label class="control-label" for="{{ form.title.id }}">Title</label>
                 <div class=controls>
-                    {{ form.title(placeholder="Title", autofocus="true") }}
+                    {{ form.title(placeholder="Title", autofocus="true", onchange="javascript: setSlug()" ) }}
                 </div>
             </div>
             <div class="control-group">
