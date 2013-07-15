@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html lang="en-gb">
-    <head>
-        {% block head %}
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen" />
-        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" />
-        <link href="{{ url_for('static', filename="css/main.css") }}" rel="stylesheet" />
-        <!-- <link href="/static/prettify/prettify.css" type="text/css" rel="stylesheet" /> -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>
-        {% block title %}{% endblock %} - Adam's Blog
-        </title>
-        {% endblock %}
-    </head>
-    <body>
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                  js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
-                      fjs.parentNode.insertBefore(js, fjs);
-                      }(document, 'script', 'facebook-jssdk'));</script>
+  <head>
+    {%- block head %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename="css/main.css") }}" rel="stylesheet" />
+    <!-- <link href="/static/prettify/prettify.css" type="text/css" rel="stylesheet" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="{{ url_for('static', filename="js/main.js") }}" type="text/javascript" />
+    <title>
+      {%- block title %}{%- endblock %} - Adam&#39;s Blog
+    </title>
+    {%- endblock %}
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     <div id=wrap>
-        <div class=container>
-            {% include 'navbar.html' %}
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class=alert>
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            {% endwith %}
-            {% block content %}{% endblock %}
-        </div>
+      <div class=container>
+      {% include 'navbar.html' %}
+      {%- with messages = get_flashed_messages() %}
+        {%- if messages %}
+          <div class=alert>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <ul>
+              {%- for message in messages %}
+              <li>{{ message }}</li>
+              {%- endfor %}
+            </ul>
+          </div>
+        {%- endif %}
+      {%- endwith %}
+      {%- block content %}{% endblock %}
+      </div>
     </div>
     <div class=footer>
-        <div class=container>
-            {% block footer %}
-            {% endblock %}
-            <span id=gentime>Page generated in {{ g.request_time() }}
-              <span id=attr>created using <a href="http://flask.pocoo.org/">Flask</a> & <a href="http://jinja.pocoo.org/">Jinja2</a>
-                {% if current_user.is_authenticated() %}.{% else %}<a href="{{ url_for('login') }}">.</a>{% endif %}</span>
-            <script src="http://code.jquery.com/jquery-latest.js"></script>
-            <script src="/static/js/bootstrap.min.js"></script>
-            <!-- <script type="text/javascript" src="static/prettify/prettify.js"></script> -->
-            <script type="text/javascript">
-                  window.___gcfg = {lang: 'en-GB'};
+      <div class=container>
+        {% block footer %}{% endblock %}
+        <span id=gentime>Page generated in {{ g.request_time() }}
+        <span id=attr>created using <a href="http://flask.pocoo.org/">Flask</a> & <a href="http://jinja.pocoo.org/">Jinja2</a>
+        {%- if current_user.is_authenticated() %}.{% else %}<a href="{{ url_for('login') }}">.</a>{% endif %}</span>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <!-- <script type="text/javascript" src="static/prettify/prettify.js"></script> -->
+        <script type="text/javascript">
+          window.___gcfg = {lang: 'en-GB'};
 
-                    (function() {
-                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                        po.src = 'https://apis.google.com/js/plusone.js';
-                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                          })();
-            </script>
-        </div>
+          (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+          })();
+        </script>
+      </div>
     </div>
-    </body>
+  </body>
 </html>

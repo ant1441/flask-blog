@@ -1,18 +1,18 @@
 <div class=navbar>
-    <div class=navbar-inner>
-        <a class=brand href="{{ url_for('index') }}">
-            {% if blog %}{{ blog.name }}
-            {% else %}Adam's Blog{% endif%}
-        </a>
-        <ul class=nav>
-        </ul>
-        <ul class="nav pull-right">
-            {% if current_user.is_authenticated() %}
-                <li><a>{{ current_user.username }}</a></li>
-                <li class="divvider-vertical"></li>
-                <li><a href="{{ url_for('newPost') }}">Post</a></li>
-                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-            {% endif %}
-        </ul>
-    </div>
+  <div class=navbar-inner>
+    <a class=brand href="{{ url_for('index') }}">
+      {% if blog %}{{ blog.name }}
+      {% else %}Adam's Blog{% endif%}
+    </a>
+    <ul class=nav>
+    </ul>
+    <ul class="nav pull-right">
+      {%- if current_user.is_authenticated() %}
+        <li><a>{{ current_user.username }}</a></li>
+        <li class="divvider-vertical"></li>
+        <li><a href="{{ url_for('newPost') }}">Post</a></li>
+        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      {%- endif %}
+    </ul>
+  </div>
 </div>

@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% block title %}
+{%- block title %}
 Home
-{% endblock %}
+{%- endblock %}
 {% block content %}
 <div class=row>
     <div class=span8>
         <div class=main>
             <div class=content>
-                {% for post in posts %}
+                {%- for post in posts %}
                     {% include 'post.html' %}
-                {% endfor %}
+                {%- endfor %}
             </div>
         </div>
     </div>
