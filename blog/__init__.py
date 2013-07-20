@@ -1,30 +1,28 @@
+import os
 from os.path import join
 import logging
 import logging.config
+import yaml
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.admin import Admin
 from blog.config import basedir
 
-logging_cfg_file = "logging.cfg"
-
+CONFIG = os.getenv("LOG_CFG", "config.yaml")
+with open(join(basedir, CONFIG)) as config:
+    GLOBAL_CONFIG = yaml.load(config)
 # import logging configuration
-if logging_cfg_file:
-    import yaml
-    try:
-        with open(join(basedir, logging_cfg_file)) as config:
-            logging.config.dictConfig(yaml.load(config))
-    except IOError:
-        logging.basicConfig(level=logging.DEBUG)
-else:
+try:
+    logging.config.dictConfig(GLOBAL_CONFIG['logging'])
+except (IOError,NameError):
+    print "ERROR"
     logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger("blog")
+
 
 app = Flask(__name__)
-config_object = 'Production'
-#config_object = 'Testing'
-app.config.from_object('blog.config.{}'.format(config_object))
+app.logger.info("from app")
+app.config.from_object('blog.config.{}'.format(GLOBAL_CONFIG['environment']))
 db = SQLAlchemy(app)
 admin = Admin(app, name='Blog')
 

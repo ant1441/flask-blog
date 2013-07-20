@@ -3,12 +3,9 @@ from flask.ext.login import login_user, logout_user, current_user, \
     login_required
 from flask import render_template, flash, redirect, url_for, g, request
 from werkzeug.security import check_password_hash
-from blog import app, lm, db, log
+from blog import app, lm, db
 from blog.forms import postBlogForm, loginForm
 from blog.models import User, Post
-
-# set up logger
-#log = logging.getLogger(__name__)
 
 
 @app.before_request
@@ -33,6 +30,9 @@ def index():
 def newPost():
     form = postBlogForm()
     if form.validate_on_submit():
+        app.logger.info("User %s made post %s",
+                        form.author.data,
+                        form.title.data)
         flash("Posting from author %s." %
               form.author.data or current_user.username)
         db.session.add(
@@ -79,10 +79,17 @@ def login():
         if user:
             if try_login(user, str(form.password.data)):
                 flash('Logged in successfully!')
-                log.info("User %s logged in", user)
+                app.logger.info("User %s logged in", user)
                 login_user(user, remember=form.remember_me.data)
                 return redirect(request.args.get("next") or url_for("index"))
+            else:
+                app.logger.warn("Log in attempt to '%s' from IP %s",
+                                user,
+                                request.remote_addr)
         else:
+            app.logger.warn("Log in attempt to '%s' from IP %s",
+                            form.user.data,
+                            request.remote_addr)
             flash('User not found!')
     return render_template('login.html',
                            title="Log In",
