@@ -17,10 +17,15 @@ class Production(Config):
     SQLALCHEMY_MIGRATE_REPO = join(basedir, 'db_repository')
 
 
+class Development(Config):
+    CSRF_ENABLED = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(
+        databasedir,
+        'development.db')
+    SQLALCHEMY_MIGRATE_REPO = join(basedir, 'db_repository')
+
+
 class Testing(Config):
     CSRF_ENABLED = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(
-        databasedir,
-        'test.db')
-    DEBUG = True
