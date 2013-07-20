@@ -1,4 +1,5 @@
 import time
+from sqlalchemy.exc import IntegrityError
 from flask.ext.login import (
         login_user, logout_user, current_user, login_required)
 from flask import (
@@ -28,14 +29,18 @@ def index():
 
 @app.route('/new_post/', methods=['GET', 'POST'])
 @login_required
-def newPost():
+def new_post():
+    """
+    Create a new post.
+
+    If :GET: present the form to submit a new post.
+    If :POST:, if valid, submit the post and redirect to home.
+    """
     form = postBlogForm()
     if form.validate_on_submit():
-        app.logger.info("User %s made post %s",
-                        form.author.data,
+        app.logger.info("User %s submitted post %s",
+                        current_user,
                         form.title.data)
-        flash("Posting from author %s." %
-              form.author.data or current_user.username)
         db.session.add(
             Post(title=form.title.data,
                  slug=form.slug.data,
@@ -43,7 +48,33 @@ def newPost():
                  user=current_user,
                  code=form.code.data,
                  ))
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError as exc:
+            if exc.message.endswith("not unique"):
+                app.logger.error("Post '%s' was not unique in field '%s'",
+                                 form.title.data,
+                                 exc.message
+                                 .split(" ", 2)[-1].rsplit(" ", 3)[0])
+            else:
+                app.logger.critical("Unknown Integrity Error with post '%s'",
+                                    form.title.data,
+                                    exc_info=True)
+            db.session.rollback()
+            flash("Integrity Error!", 'error')
+            return render_template("make_post.html",
+                                   title="Post Blog",
+                                   form=form)
+        except:
+            app.logger.critical("Exception on %s [%s]",
+                                'page',
+                                'method',
+                                exc_info=True)
+            db.session.rollback()
+            abort(500)
+        flash("{} submitted {}.".format(
+            current_user.username,
+            form.title.data), 'success')
         return redirect(url_for('index'))
     return render_template("make_post.html",
                            title="Post Blog",
@@ -83,7 +114,7 @@ def login():
         user = User.query.filter_by(username=form.user.data).first()
         if user:
             if try_login(user, str(form.password.data)):
-                flash('Logged in successfully!')
+                flash('Logged in successfully!', 'success')
                 app.logger.info("User %s logged in", user)
                 login_user(user, remember=form.remember_me.data)
                 return redirect(request.args.get("next") or url_for("index"))
@@ -95,7 +126,7 @@ def login():
             app.logger.warn("Log in attempt to '%s' from IP %s",
                             form.user.data,
                             request.remote_addr)
-            flash('User not found!')
+            flash('User not found!', 'error')
     return render_template('login.html',
                            title="Log In",
                            form=form)

@@ -10,7 +10,7 @@
       {%- if current_user.is_authenticated() %}
         <li><a>{{ current_user.username }}</a></li>
         <li class="divvider-vertical"></li>
-        <li><a href="{{ url_for('newPost') }}">Post</a></li>
+        <li><a href="{{ url_for('new_post') }}">Post</a></li>
         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
       {%- endif %}
     </ul>

@@ -7,22 +7,6 @@ Write a post
        <form class="form-horizontal" action="" method="post" name="post-blog">
             {{ form.hidden_tag() }}
             <legend>Post</legend>
-            <div class="control-group hidden">
-                <label class="control-label" for="{{ form.author.id }}">Author</label>
-                <div class=controls>
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-user"></i></span>
-                        {{ form.author(size=12, placeholder="Author") }}
-                    </div>
-                </div>
-            {% if form.errors.author %}
-                <span class="alert alert-error">
-                    {% for authorError in form.errors.author %}
-                        {{ authorError }}
-                    {% endfor %}
-                </span>
-            {% endif %}
-            </div>
             <div class="control-group">
                 <label class="control-label" for="{{ form.title.id }}">Title</label>
                 <div class=controls>
