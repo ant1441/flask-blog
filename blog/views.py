@@ -1,7 +1,8 @@
 import time
-from flask.ext.login import login_user, logout_user, current_user, \
-    login_required
-from flask import render_template, flash, redirect, url_for, g, request
+from flask.ext.login import (
+        login_user, logout_user, current_user, login_required)
+from flask import (
+        render_template, flash, redirect, url_for, g, request, abort)
 from werkzeug.security import check_password_hash
 from blog import app, lm, db
 from blog.forms import postBlogForm, loginForm
@@ -37,6 +38,7 @@ def newPost():
               form.author.data or current_user.username)
         db.session.add(
             Post(title=form.title.data,
+                 slug=form.slug.data,
                  content=form.text.data,
                  user=current_user,
                  code=form.code.data,
@@ -48,12 +50,15 @@ def newPost():
                            form=form)
 
 
-#@app.route('/post/',
-#           defaults={'post_id': int(
-#               Post.query.order_by(Post.created_at).limit(1).id)})
 @app.route('/post/<int:post_id>')
-def post(post_id):
-    post = Post.query.filter_by(id=post_id).first_or_404()
+@app.route('/post/<slug>')
+def post(post_id=None, slug=None):
+    if slug:
+        if post_id:
+            abort(500)
+        post = Post.query.filter_by(slug=slug).first_or_404()
+    elif post_id:
+        post = Post.query.filter_by(id=post_id).first_or_404()
     return render_template("post_page.html",
                            post=post)
 

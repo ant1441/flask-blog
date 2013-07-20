@@ -19,12 +19,14 @@ class Post(db.Model):
 
     def __init__(self,
                  title,
+                 slug,
                  content,
                  user,
                  category_id=None,
                  code=False,
                  hidden=False):
         self.title = title
+        self.slug = slug
         self.content = content
         self.category_id = category_id
         self.user_id = user.id
