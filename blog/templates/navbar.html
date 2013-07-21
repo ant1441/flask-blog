@@ -1,18 +1,25 @@
 <div class=navbar>
   <div class=navbar-inner>
+    {% block brand %}
     <a class=brand href="{{ url_for('index') }}">
       {% if blog %}{{ blog.name }}
       {% else %}Adam's Blog{% endif%}
     </a>
+    {% endblock %}
     <ul class=nav>
+      {% block left_nav %}
+      {% endblock %}
     </ul>
     <ul class="nav pull-right">
+      {% block right_nav %}
       {%- if current_user.is_authenticated() %}
         <li><a>{{ current_user.username }}</a></li>
         <li class="divvider-vertical"></li>
+        <li><a href="{{ url_for('index') }}admin">Admin</a></li>
         <li><a href="{{ url_for('new_post') }}">Post</a></li>
         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
       {%- endif %}
+      {% endblock %}
     </ul>
   </div>
 </div>

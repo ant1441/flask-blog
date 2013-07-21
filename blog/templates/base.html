@@ -8,10 +8,9 @@
     <link href="{{ url_for('static', filename="css/main.css") }}" rel="stylesheet" />
     <!-- <link href="/static/prettify/prettify.css" type="text/css" rel="stylesheet" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="{{ url_for('static', filename="js/main.js") }}" type="text/javascript" />
+    <script src="{{ url_for('static', filename="js/main.js") }}" type="text/javascript"></script>
     <title>
-      {%- block title %}{%- endblock %} - Adam&#39;s Blog
-    </title>
+      {%- block title %}{%- endblock %} - Adam&#39;s Blog</title>
     {%- endblock %}
   </head>
   <body>
@@ -43,10 +42,11 @@
     </div>
     <div class=footer>
       <div class=container>
-        {% block footer %}{% endblock %}
-        <span id=gentime>Page generated in {{ g.request_time() }}
+        {%- block footer %}
+        <span id=gentime>Page generated in {{ g.request_time() }}</span>
         <span id=attr>created using <a href="http://flask.pocoo.org/">Flask</a> & <a href="http://jinja.pocoo.org/">Jinja2</a>
         {%- if current_user.is_authenticated() %}.{% else %}<a href="{{ url_for('login') }}">.</a>{% endif %}</span>
+        {%- endblock %}
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
         <!-- <script type="text/javascript" src="static/prettify/prettify.js"></script> -->
