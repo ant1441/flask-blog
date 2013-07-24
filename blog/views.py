@@ -1,5 +1,5 @@
 import time
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from flask.ext.login import (
         login_user, logout_user, current_user, login_required)
 from flask import (
@@ -21,7 +21,13 @@ def before_request():
 # begin general views
 @app.route('/')
 def index():
-    posts = Post.query.order_by(Post.created_at.desc()).all()
+    try:
+        posts = Post.query.order_by(Post.created_at.desc()).all()
+    except OperationalError:
+        app.logger.critical("Database file: %s",
+                            app.config['SQLALCHEMY_DATABASE_URI'],
+                            exc_info=True)
+        raise
     return render_template("index.html",
                            title="Home",
                            posts=posts)

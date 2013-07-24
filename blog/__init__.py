@@ -21,7 +21,6 @@ except (IOError,NameError):
 
 
 app = Flask(__name__)
-app.logger.info("from app")
 app.config.from_object('blog.config.{}'.format(GLOBAL_CONFIG['environment']))
 db = SQLAlchemy(app)
 admin = Admin(app, name='Blog')

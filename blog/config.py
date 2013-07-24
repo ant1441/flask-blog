@@ -1,3 +1,4 @@
+import os
 from os.path import abspath, dirname, join
 
 basedir = abspath(dirname(__file__))
@@ -6,23 +7,23 @@ databasedir = join(basedir, 'database')
 
 class Config(object):
     SECRET_KEY = \
-        r'\x91a\xd3gE\xa6}\xb8O\x9fn@\x83+\xed\xa3Y+\x7f\x1b\x0b\xba\x84\xf5'
+        r'\x7f\xd0\xedMT\xed\\\x92[\xdb~v\xb4\xdc\xd0\\3f\x11\xd7\x19\xcelh'
 
 
 class Production(Config):
     CSRF_ENABLED = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(
-        databasedir,
-        'blog.db')
+    SQLALCHEMY_DATABASE_URI = os.getenv("DB_FILE",
+        'sqlite:///' + join(databasedir,
+                            'blog.db'))
     SQLALCHEMY_MIGRATE_REPO = join(basedir, 'db_repository')
 
 
 class Development(Config):
     CSRF_ENABLED = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(
-        databasedir,
-        'development.db')
+    SQLALCHEMY_DATABASE_URI = os.getenv("DB_FILE",
+        'sqlite:///' + join(databasedir,
+                            'development.db'))
     SQLALCHEMY_MIGRATE_REPO = join(basedir, 'db_repository')
 
 
