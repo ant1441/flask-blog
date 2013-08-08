@@ -35,5 +35,5 @@ lm.login_view = 'login'
 
 if __name__ == "blog":
     # If these are imported by nose, the coverage gets all buggered up.
-    from blog import views, error_views, admin_views  # flake8: noqa
+    from blog.views import views, login_views, error_views, admin_views
     from blog.models import *

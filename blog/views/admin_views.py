@@ -1,11 +1,8 @@
-from os.path import join
-from flask.ext.admin import BaseView, expose
+from flask.ext.admin import BaseView
 from flask.ext.admin.contrib.sqlamodel import ModelView
 from flask.ext.admin.contrib.fileadmin import FileAdmin
-from flask.ext.admin.base import MenuItem
 from flask.ext.login import current_user
 from blog import db, admin
-from blog.config import basedir
 from blog.models import User, Post, Category
 
 
@@ -48,15 +45,15 @@ class CategoryAdmin(ModelView, AuthView):
         super(CategoryAdmin, self).__init__(Category, session)
 
 
-class BlogFileAdmin(FileAdmin, AuthView):
-    def __init__(self, directory, url, *args, **kwargs):
-        super(BlogFileAdmin, self).__init__(join(basedir, directory),
-                                            url,
-                                            *args,
-                                            **kwargs)
+#class BlogFileAdmin(FileAdmin, AuthView):
+#    def __init__(self, directory, url, *args, **kwargs):
+#        super(BlogFileAdmin, self).__init__(directory,
+#                                            url,
+#                                            *args,
+#                                            **kwargs)
 
 
 admin.add_view(UserAdmin(db.session))
 admin.add_view(PostAdmin(db.session))
 admin.add_view(CategoryAdmin(db.session))
-admin.add_view(BlogFileAdmin('static', '', name="Static Files"))
+#admin.add_view(BlogFileAdmin('static', '', name="Static Files"))
