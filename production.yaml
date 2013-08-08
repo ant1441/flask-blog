@@ -3,11 +3,11 @@ logging:
     version: 1
     root:
         level: WARNING
-        handlers: [info_file, debug_file]
+        handlers: [console, info_file, debug_file]
     loggers:
         blog:
             level: DEBUG
-            handlers: [info_file, debug_file]
+            handlers: [console]
             propogate: False
         werkzeug:
             level: INFO
@@ -37,3 +37,7 @@ logging:
         file:
             format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 environment: "Production"
+flask:
+    SECRET_KEY: '\\x7f\\xd0\\xedMT\\xed\\\\\\x92[\\xdb~v\\xb4\\xdc\\xd0\\\\3f\\x11\\xd7\\x19\\xcelh'
+    CSRF_ENABLED: True
+    SQLALCHEMY_DATABASE_URI: 'sqlite:///production.db'

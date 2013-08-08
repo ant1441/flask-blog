@@ -1,27 +1,31 @@
+import sys
 import os
-from os.path import join
 import logging
 import logging.config
 import yaml
+
+__version__ = "0.3"
+
+CONFIG = os.getenv("LOG_CFG", "development.yaml")
+
+
+try:
+    with open(CONFIG) as config:
+        GLOBAL_CONFIG = yaml.load(config)
+# import logging configuration
+    logging.config.dictConfig(GLOBAL_CONFIG['logging'])
+except:
+    sys.stderr.write("ERROR loading configuration\n")
+    raise
+
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.admin import Admin
-from blog.config import basedir
-
-CONFIG = os.getenv("LOG_CFG", "config.yaml")
-with open(join(basedir, CONFIG)) as config:
-    GLOBAL_CONFIG = yaml.load(config)
-# import logging configuration
-try:
-    logging.config.dictConfig(GLOBAL_CONFIG['logging'])
-except (IOError,NameError):
-    print "ERROR"
-    logging.basicConfig(level=logging.DEBUG)
 
 
 app = Flask(__name__)
-app.config.from_object('blog.config.{}'.format(GLOBAL_CONFIG['environment']))
+app.config.update(**GLOBAL_CONFIG['flask'])
 db = SQLAlchemy(app)
 admin = Admin(app, name='Blog')
 

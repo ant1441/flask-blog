@@ -36,4 +36,8 @@ logging:
             format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         file:
             format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-environment: "Development"
+environment: "Testing"
+flask:
+    SECRET_KEY: '\\x7f\\xd0\\xedMT\\xed\\\\\\x92[\\xdb~v\\xb4\\xdc\\xd0\\\\3f\\x11\\xd7\\x19\\xcelh'
+    CSRF_ENABLED: False
+    TESTING: True
