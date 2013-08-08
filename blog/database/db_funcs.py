@@ -11,18 +11,19 @@ def test_data():
     me = User("Adam", "adam@example.com", "password")
     guest = User("Guest", "guest@example.com", "guestpass")
     db.session.add(admin)
+    db.session.commit()
     db.session.add(me)
+    db.session.commit()
     db.session.add(guest)
     db.session.commit()
     testCat = Category("Test")
     db.session.add(testCat)
     db.session.commit()
-    post = Post("Test Post!",
-                "This is a test post.",
-                User.query.first(),
-                Category.query.first())
-    db.session.add(post)
-    db.session.commit()
+    with open("lorem.txt") as file:
+        post = Post("Test Post!",
+                    file.read(),
+                    User.query.first(),
+                    Category.query.first())
 
 if __name__ == "__main__":
     init_db()
