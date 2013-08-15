@@ -3,7 +3,7 @@ from flask import render_template, flash, request, redirect, url_for
 from flask.ext.login import (
     login_user, logout_user)
 from blog import app, lm
-from blog.forms import loginForm
+from blog.forms import LoginForm
 from blog.models import User
 from blog.views import log
 
@@ -23,7 +23,7 @@ def try_login(user, password):
 # url routing
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
-    form = loginForm()
+    form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.user.data).first()
         if user:
