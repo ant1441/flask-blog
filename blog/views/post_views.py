@@ -1,4 +1,5 @@
 from sqlalchemy.exc import IntegrityError
+from jinja2 import TemplateNotFound
 from flask.ext.login import current_user, login_required
 from flask import (
     render_template, flash, redirect, url_for, abort)
@@ -6,6 +7,7 @@ from blog import app, db
 from blog.forms import PostBlogForm
 from blog.models import Post
 from blog.views import log
+from blog import dal
 
 
 @app.route('/new_post/', methods=['GET', 'POST'])
@@ -48,7 +50,7 @@ def new_post():
                              exc_info=True)
             db.session.rollback()
             flash("Integrity Error!", 'error')
-            return render_template("make_post.html",
+            return render_template("post/make_post.html",
                                    title="Post Blog",
                                    form=form)
         except:
@@ -62,20 +64,24 @@ def new_post():
             current_user.username,
             form.title.data), 'success')
         return redirect(url_for('index'))
-    return render_template("make_post.html",
+    return render_template("post/make_post.html",
                            title="Post Blog",
                            form=form)
 
 
-@app.route('/post/<int:post_id>')
-@app.route('/post/<slug>')
-def post(post_id=None, slug=None):
+def get_post(post_id=None, slug=None):
     if slug:
         if post_id:
             abort(500)
-        post = Post.query.filter_by(slug=slug).first_or_404()
+        return Post.query.filter_by(slug=slug).first_or_404()
     elif post_id:
-        post = Post.query.filter_by(id=post_id).first_or_404()
+        return Post.query.filter_by(id=post_id).first_or_404()
+
+
+@app.route('/post/<int:post_id>/')
+@app.route('/post/<slug>/')
+def post(post_id=None, slug=None):
+    _post = get_post(post_id, slug)
     log.debug("post: %s", post)
-    return render_template("post_page.html",
-                           post=post)
+    return render_template("post/post_page.html",
+                           post=_post)
