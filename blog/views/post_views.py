@@ -22,13 +22,18 @@ def new_post():
         log.info("User %s submitted post %s",
                  current_user,
                  form.title.data)
-        db.session.add(
-            Post(title=form.title.data,
-                 slug=form.slug.data,
-                 content=form.text.data,
-                 user=current_user,
-                 code=form.code.data,
-                 ))
+        log.debug("CodeType: %s", form.code_type.data)
+        if form.code_type.data is None:
+            code = False
+        else:
+            code = True
+        post = Post(title=form.title.data,
+                    slug=form.slug.data,
+                    content=form.text.data,
+                    user=current_user,
+                    code=code,
+                    code_type=form.code_type.data)
+        db.session.add(post)
         try:
             db.session.commit()
         except IntegrityError as exc:
@@ -71,5 +76,6 @@ def post(post_id=None, slug=None):
         post = Post.query.filter_by(slug=slug).first_or_404()
     elif post_id:
         post = Post.query.filter_by(id=post_id).first_or_404()
+    log.debug("post: %s", post)
     return render_template("post_page.html",
                            post=post)

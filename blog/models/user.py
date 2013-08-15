@@ -25,7 +25,7 @@ class User(db.Model):
     # relationships
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
-    def __init__(self, username, email, password):
+    def __init__(self, username=None, email=None, password=None):
         self.username = username
         self.email = email
         self.password = generate_password_hash(

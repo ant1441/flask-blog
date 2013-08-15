@@ -1,6 +1,9 @@
 from flask.ext.wtf import (
-    Form, TextField, TextAreaField, SelectField, BooleanField)
+    Form, TextField, TextAreaField, BooleanField)
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask.ext.wtf import Required, length
+
+from blog.forms.utilities import code_types
 
 
 class PostBlogForm(Form):
@@ -9,10 +12,8 @@ class PostBlogForm(Form):
     text = TextAreaField('text', validators=[Required()])
     slug = TextField('slug', validators=[length(max=64)])
     code = BooleanField('code')
-    codeType = SelectField(
+    code_type = QuerySelectField(
         "codeType",
-        choices=[
-            ('none', 'None'),
-            ('html', 'HTML'),
-            ('python', 'Python')
-        ])
+        query_factory=code_types,
+        allow_blank=True,
+        blank_text="False")

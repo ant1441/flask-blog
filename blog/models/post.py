@@ -14,16 +14,17 @@ class Post(db.Model):
 
     # relationships
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
     category = db.relationship('Category', backref='posts', lazy='dynamic')
+    code_type_id = db.Column(db.Integer, db.ForeignKey('code_type.id'))
 
     def __init__(self,
-                 title,
-                 slug,
-                 content,
-                 user,
+                 title=None,
+                 slug=None,
+                 content=None,
+                 user=None,
                  category_id=None,
                  code=False,
+                 code_type=None,
                  hidden=False):
         self.title = title
         self.slug = slug
@@ -32,6 +33,7 @@ class Post(db.Model):
         self.user_id = user.id
         self.created_at = datetime.utcnow()
         self.code = code
+        self.code_type = code_type
         self.hidden = hidden
 
     def date(self, format_="%d %b %y"):

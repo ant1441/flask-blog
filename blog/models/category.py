@@ -11,7 +11,7 @@ class Category(db.Model):
     # relationships
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
-    def __init__(self, name, hidden=False):
+    def __init__(self, name=None, hidden=False):
         self.name = name
         self.created_at = datetime.utcnow()
         self.hidden = hidden

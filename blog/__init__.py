@@ -6,7 +6,7 @@ import yaml
 
 __version__ = "0.3"
 
-CONFIG = os.getenv("LOG_CFG", "development.yaml")
+CONFIG = os.getenv("LOG_CFG", "config.yaml")
 
 
 try:
@@ -33,8 +33,11 @@ lm = LoginManager()
 lm.setup_app(app)
 lm.login_view = 'login'
 
-if __name__ == "blog":
-    # If these are imported by nose, the coverage gets all buggered up.
-    from blog.views import (
-        views, login_views, error_views, admin_views, post_views)
-    from blog.models import Category, Post, User
+log = logging.getLogger(__name__)
+
+from blog.views import (
+    views, login_views, error_views, admin_views, post_views)
+from blog.models import Category, Post, User, CodeType
+
+from blog.utilities import parse
+app.jinja_env.filters['parse'] = parse

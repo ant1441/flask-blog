@@ -3,45 +3,42 @@
 Write a post
 {% endblock %}
 {% block content %}
-   <div id=post-form>
-       <form class="form-horizontal" action="" method="post" name="post-blog">
-            {{ form.hidden_tag() }}
-            <legend>Post</legend>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.title.id }}">Title</label>
-                <div class=controls>
-                    {{ form.title(placeholder="Title", autofocus="true", onchange="javascript: setSlug()" ) }}
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.text.id }}">Text</label>
-                <div class=controls>
-                    {{ form.text(placeholder="Enter your blog post here") }}
-                </div>
-                {% if form.errors.text %}
-                    <span class="alert alert-error">
-                        {% for textError in form.errors.text %}
-                            {{ textError }}
-                        {% endfor %}
-                    </span>
-                {% endif %} 
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.codeType.id }}">Code</label>
-                <div class=controls>
-                    {{ form.code }}
-                    <div class="hidden">
-                        {{ form.codeType }}
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.slug.id }}">Slug</label>
-                <div class=controls>
-                    {{ form.slug }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+<div id=post-form>
+  <form class="form-horizontal" action="" method="post" name="post-blog">
+    {{ form.hidden_tag() }}
+    <legend>Post</legend>
+    <div class="control-group">
+      <label class="control-label" for="{{ form.title.id }}">Title</label>
+      <div class=controls>
+        {{ form.title(placeholder="Title", autofocus="true", onchange="javascript: setSlug()" ) }}
+      </div>
     </div>
+    <div class="control-group">
+      <label class="control-label" for="{{ form.text.id }}">Text</label>
+      <div class=controls>
+        {{ form.text(placeholder="Enter your blog post here") }}
+      </div>
+      {% if form.errors.text %}
+      <span class="alert alert-error">
+        {% for textError in form.errors.text %}
+        {{ textError }}
+        {% endfor %}
+      </span>
+      {% endif %}
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="{{ form.code_type.id }}">Code</label>
+      <div class=controls>
+        {{ form.code_type }}
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="{{ form.slug.id }}">Slug</label>
+      <div class=controls>
+        {{ form.slug }}
+      </div>
+    </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
 {% endblock %}
