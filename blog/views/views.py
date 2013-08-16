@@ -1,15 +1,18 @@
 from sqlalchemy.exc import OperationalError
 from flask import render_template
 from blog import app
-from blog.models import Post
 from blog.views import log
+from blog.db_layer import PostLogic
 
 
 # begin general views
 @app.route('/')
 def index():
     try:
-        posts = Post.query.order_by(Post.created_at.desc()).all()
+        posts = (PostLogic.query
+                 .filter(PostLogic.visible)
+                 .order_by(PostLogic.created_at.desc())
+                 .all())
     except OperationalError:
         log.critical("Database file: %s",
                      app.config['SQLALCHEMY_DATABASE_URI'],

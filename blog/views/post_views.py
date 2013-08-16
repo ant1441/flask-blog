@@ -1,5 +1,5 @@
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
-from jinja2 import TemplateNotFound
 from flask.ext.login import current_user, login_required
 from flask import (
     render_template, flash, redirect, url_for, abort)
@@ -7,7 +7,7 @@ from blog import app, db
 from blog.forms import PostBlogForm
 from blog.models import Post
 from blog.views import log
-from blog import dal
+from blog.db_layer import PostLogic
 
 
 @app.route('/new_post/', methods=['GET', 'POST'])
@@ -34,7 +34,7 @@ def new_post():
                     content=form.text.data,
                     user=current_user,
                     code=code,
-                    code_type=form.code_type.data)
+                    code_type=form.code_type.data,)
         db.session.add(post)
         try:
             db.session.commit()
@@ -73,15 +73,24 @@ def get_post(post_id=None, slug=None):
     if slug:
         if post_id:
             abort(500)
-        return Post.query.filter_by(slug=slug).first_or_404()
+        return (PostLogic.query
+                .filter_by(slug=slug)
+                .filter(PostLogic.visible)
+                .one())
     elif post_id:
-        return Post.query.filter_by(id=post_id).first_or_404()
+        return (PostLogic.query
+                .filter_by(id=post_id)
+                .filter(PostLogic.visible)
+                .one())
 
 
 @app.route('/post/<int:post_id>/')
 @app.route('/post/<slug>/')
 def post(post_id=None, slug=None):
-    _post = get_post(post_id, slug)
+    try:
+        _post = get_post(post_id, slug)
+    except NoResultFound:
+        abort(404)
     log.debug("post: %s", post)
     return render_template("post/post_page.html",
                            post=_post)
