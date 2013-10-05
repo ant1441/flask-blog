@@ -6,6 +6,7 @@ from flask import (
 from blog import app, db
 from blog.forms import PostBlogForm
 from blog.models import Post
+from blog.utilities import to_json
 from blog.views import log
 from blog.db_layer import PostLogic
 
@@ -91,6 +92,18 @@ def post(post_id=None, slug=None):
         _post = get_post(post_id, slug)
     except NoResultFound:
         abort(404)
-    log.debug("post: %s", post)
+    log.debug("post: %s", _post)
     return render_template("post/post_page.html",
                            post=_post)
+
+
+@app.route('/post/<int:post_id>.json')
+@app.route('/post/<slug>.json')
+def json_post(post_id=None, slug=None):
+    try:
+        _post = get_post(post_id, slug)
+    except NoResultFound:
+        abort(404)
+    _post = to_json(_post)
+    log.debug("post: %s", _post)
+    return _post
