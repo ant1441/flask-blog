@@ -25,4 +25,5 @@ def index():
 
 @app.route('/about')
 def about():
-    return "About Me"
+    return render_template("about.html",
+                           title="About Me")
