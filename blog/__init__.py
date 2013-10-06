@@ -4,15 +4,15 @@ import logging
 import logging.config
 import yaml
 
-__version__ = "0.3"
+__version__ = '0.3-17'
 
-CONFIG = os.getenv("LOG_CFG", "config.yaml")
+CONFIG = "config.yaml"
 
 
 try:
     with open(CONFIG) as config:
         GLOBAL_CONFIG = yaml.load(config)
-# import logging configuration
+    # import logging configuration
     logging.config.dictConfig(GLOBAL_CONFIG['logging'])
 except:
     sys.stderr.write("ERROR loading configuration\n")

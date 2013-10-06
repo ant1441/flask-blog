@@ -4,10 +4,12 @@ from flask.ext.admin.contrib.fileadmin import FileAdmin
 from flask.ext.login import current_user
 from blog import db, admin
 from blog.models import User, Post, Category, CodeType
+from blog.views import log
 
 
 class AuthView(BaseView):
     def is_accessible(self):
+        log.debug("Checking Authentication")
         return current_user.is_authenticated()
 
 
@@ -29,6 +31,7 @@ class UserAdmin(ModelView, AuthView):
     column_searchable_list = ('username', 'email', 'first_name', 'last_name')
 
     def __init__(self, session):
+        log.debug("Creating User View")
         super(UserAdmin, self).__init__(User, session)
 
 

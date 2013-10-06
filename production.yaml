@@ -19,14 +19,14 @@ logging:
             stream: ext://sys.stdout
         info_file:
             class: logging.handlers.RotatingFileHandler
-            filename: info_log.log
+            filename: /var/log/blog/info_log.log
             maxBytes: 10485760 # 10MB
             backupCount: 20
             level: INFO
             formatter: simple
         debug_file:
             class: logging.handlers.RotatingFileHandler
-            filename: debug_log.log
+            filename: /var/log/blog/debug_log.log
             maxBytes: 10485760 # 10MB
             backupCount: 20
             level: DEBUG
@@ -40,4 +40,4 @@ environment: "Production"
 flask:
     SECRET_KEY: '\\x7f\\xd0\\xedMT\\xed\\\\\\x92[\\xdb~v\\xb4\\xdc\\xd0\\\\3f\\x11\\xd7\\x19\\xcelh'
     CSRF_ENABLED: True
-    SQLALCHEMY_DATABASE_URI: 'sqlite:///production.db'
+    SQLALCHEMY_DATABASE_URI: 'postgresql:///blog'

@@ -12,7 +12,7 @@ SALT_LENGTH = 16
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    password = db.Column(db.String(58))
+    password = db.Column(db.String(74))
     email = db.Column(db.String(128), index=True)
     role = db.Column(db.Integer, default=ROLE_USER)
     first_name = db.Column(db.String(128), index=True)

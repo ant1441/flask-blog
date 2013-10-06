@@ -1,5 +1,4 @@
-include blog/*.yaml
-include blog/models/*.py
-include blog/database/*.py
+include *.yaml
+recursive-include blog *.py
 recursive-include blog/static *
 recursive-include blog/templates *.html
