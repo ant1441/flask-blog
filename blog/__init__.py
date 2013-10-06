@@ -4,7 +4,7 @@ import logging
 import logging.config
 import yaml
 
-__version__ = '0.3-17'
+__version__ = '0.4-2'
 
 CONFIG = "config.yaml"
 
@@ -14,6 +14,12 @@ try:
         GLOBAL_CONFIG = yaml.load(config)
     # import logging configuration
     logging.config.dictConfig(GLOBAL_CONFIG['logging'])
+except IOError:
+    with open("/var/local/blog/config.yaml") as config:
+        GLOBAL_CONFIG = yaml.load(config)
+    # import logging configuration
+    logging.config.dictConfig(GLOBAL_CONFIG['logging'])
+
 except:
     sys.stderr.write("ERROR loading configuration\n")
     raise
