@@ -1,7 +1,8 @@
-from flask.ext.wtf import (
-    Form, TextField, TextAreaField, BooleanField)
+from wtforms import TextField, TextAreaField, BooleanField
+from wtforms.validators import Required, length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from flask.ext.wtf import Required, length
+from flask.ext.wtf import Form
+
 
 from blog.forms.utilities import code_types
 

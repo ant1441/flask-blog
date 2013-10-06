@@ -1,6 +1,6 @@
-from flask.ext.wtf import (
-    Form, TextField, BooleanField, PasswordField)
-from flask.ext.wtf import Required
+from wtforms import TextField, BooleanField, PasswordField
+from wtforms.validators import Required
+from flask.ext.wtf import Form
 
 
 class LoginForm(Form):

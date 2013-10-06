@@ -4,7 +4,7 @@ import logging
 import logging.config
 import yaml
 
-__version__ = '0.4-2'
+__version__ = '0.4.1-1'
 
 CONFIG = "config.yaml"
 
