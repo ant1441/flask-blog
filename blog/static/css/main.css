@@ -1,3 +1,7 @@
+a {
+    color: #444444;
+}
+
 #main .date {
     border: 1px solid #ccc;
     float: right;
@@ -47,7 +51,6 @@
 
 .post-title a {
     font-size: 90%;
-    color: #444444;
 }
 
 .post-title a:hover {

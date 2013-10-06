@@ -1,41 +1,34 @@
 {% extends "base.html" %}
+{% block css %}
+<link href="{{ url_for('static', filename="css/signin.css") }}" rel="stylesheet" />
+{% endblock %}
 {% block title %}
 Log In
 {% endblock %}
 {% block content %}
-   <span name=login-form>
-       <form class="form-horizontal" action="" method="post" name="login">
-            {{ form.hidden_tag() }}
-            <legend>Log In</legend>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.user.id }}">User</label>
-                <div class=controls>
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-user"></i></span>
-                        {{ form.user(placeholder="User") }}
-                    </div>
-                </div>
-            {% if form.errors.user %}
-                <span class="alert alert-error">
-                    {% for userError in form.errors.user %}
-                        {{ userError }}
-                    {% endfor %}
-                </span>
-            {% endif %}
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.password.id }}">Password</label>
-                <div class=controls>
-                    {{ form.password(placeholder="Password") }}
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="{{ form.remember_me.id }}">Remember Me</label>
-                <div class=controls>
-                    {{ form.remember_me }}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </span>  
+<form class="form-signin" action="" method="post" name="login">
+  {{ form.hidden_tag() }}
+  <legend>Log In</legend>
+  {{ form.user(placeholder="User", class_="form-control", autofocus=True) }}
+  {% if form.errors.user %}
+    <span class="alert alert-error">
+      {% for userError in form.errors.user %}
+        {{ userError }}
+      {% endfor %}
+    </span>
+  {% endif %}
+  {{ form.password(placeholder="Password", class_="form-control") }}
+  {% if form.errors.password %}
+    <span class="alert alert-error">
+      {% for passwordError in form.errors.password %}
+        {{ passwordError }}
+      {% endfor %}
+    </span>
+  {% endif %}
+  <label class="checkbox">
+    {{ form.remember_me }}
+    Remember me
+  </label>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</form>
 {% endblock %}

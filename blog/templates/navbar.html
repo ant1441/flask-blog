@@ -1,20 +1,32 @@
-<div class=navbar>
-  <div class=navbar-inner>
+<nav class="navbar navbar-default" role="navigation">
+<!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
     {% block brand %}
-    <a class=brand href="{{ url_for('index') }}">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
       {% if blog %}{{ blog.name }}
       {% else %}Adam's Blog{% endif%}
     </a>
     {% endblock %}
-    <ul class=nav>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
       {% block left_nav %}
       {% endblock %}
     </ul>
-    <ul class="nav pull-right">
+    <ul class="nav navbar-nav navbar-right">
       {% block right_nav %}
+      <li><a href="{{ url_for('about') }}">About Me</a></li>
       {%- if current_user.is_authenticated() %}
         <li><a>{{ current_user.username }}</a></li>
-        <li class="divvider-vertical"></li>
+        <li class="divider-vertical"></li>
         <li><a href="{{ url_for('index') }}admin">Admin</a></li>
         <li><a href="{{ url_for('new_post') }}">Post</a></li>
         <li><a href="{{ url_for('logout') }}">Log Out</a></li>
@@ -22,4 +34,4 @@
       {% endblock %}
     </ul>
   </div>
-</div>
+</nav>

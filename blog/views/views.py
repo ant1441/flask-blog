@@ -21,3 +21,8 @@ def index():
     return render_template("index.html",
                            title="Home",
                            posts=posts)
+
+
+@app.route('/about')
+def about():
+    return "About Me"

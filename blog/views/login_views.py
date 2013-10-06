@@ -33,7 +33,7 @@ def login():
                 login_user(user, remember=form.remember_me.data)
                 return redirect(request.args.get("next") or url_for("index"))
             else:
-                flash('Log in Error', 'error')
+                flash('Log in Error', 'danger')
                 log.warn("Log in attempt to '%s' from IP %s",
                          user,
                          request.remote_addr)
@@ -42,7 +42,7 @@ def login():
             log.warn("Log in attempt to '%s' from IP %s",
                      form.user.data,
                      request.remote_addr)
-            flash('User not found!', 'error')
+            flash('User not found!', 'danger')
             form.errors['user'] = [u"User not found"]
     return render_template('login.html',
                            title="Log In",

@@ -50,7 +50,7 @@ def new_post():
                              form.title.data,
                              exc_info=True)
             db.session.rollback()
-            flash("Integrity Error!", 'error')
+            flash("Integrity Error!", 'danger')
             return render_template("post/make_post.html",
                                    title="Post Blog",
                                    form=form)
